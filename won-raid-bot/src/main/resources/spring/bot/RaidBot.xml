@@ -48,7 +48,4 @@
         <constructor-arg name="endpoint" value="${api.endpoint}"/>
         <constructor-arg name="token" value="${api.token}"/>
     </bean>
-    <!-- THE FOLLOWING MOBILEBOOKING CLASS MOCKS THE RESULTS OF REAL WS-CALLS -->
-    <!--bean id="mobileBooking" class="won.transport.taxi.bot.api.MobileBookingMock">
-    </bean-->
 </beans>
