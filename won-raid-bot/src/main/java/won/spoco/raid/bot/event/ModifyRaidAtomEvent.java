@@ -3,10 +3,10 @@ package won.spoco.raid.bot.event;
 import won.bot.framework.eventbot.event.BaseEvent;
 import won.spoco.raid.bot.model.Raid;
 
-public class EditRaidAtomEvent extends BaseEvent {
+public class ModifyRaidAtomEvent extends BaseEvent {
     private final Raid raid;
 
-    public EditRaidAtomEvent(Raid raid) {
+    public ModifyRaidAtomEvent(Raid raid) {
         this.raid = raid;
     }
 
