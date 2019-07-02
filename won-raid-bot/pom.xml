@@ -21,13 +21,13 @@
                 <version>2.1</version>
                 <executions>
                     <execution>
-                        <id>build-tax-bot-uberjar</id>
+                        <id>build-raid-bot-uberjar</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>taxi-bot</finalName>
+                            <finalName>raid-bot</finalName>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <artifactSet>
                                 <includes>

@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>won-raid-bot</module>
+        <module>won-spoco-core</module>
     </modules>
 
     <dependencyManagement>
