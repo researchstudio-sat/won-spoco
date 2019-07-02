@@ -68,7 +68,7 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
         Dataset dataset = this.generateRaidAtomStructure(atomURI, modifiedRaid);
         logger.debug("modify atom on won node {} with content {} ", wonNodeUri, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
         WonMessage modifyAtomMessage = buildWonMessage(atomURI, dataset);
-        EventBus bus = ctx.getEventBus();
+
         EventListener successCallback = new EventListener() {
             @Override
             public void onEvent(Event event) throws Exception {

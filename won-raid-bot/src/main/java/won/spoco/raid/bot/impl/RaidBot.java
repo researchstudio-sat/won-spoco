@@ -25,15 +25,17 @@ import won.bot.framework.eventbot.listener.impl.ActionOnFirstEventListener;
 import won.protocol.model.Connection;
 import won.spoco.raid.bot.action.CreateRaidAtomAction;
 import won.spoco.raid.bot.action.DeleteRaidAtomAction;
+import won.spoco.raid.bot.action.ModifyRaidAtomAction;
 import won.spoco.raid.bot.api.RaidFetcher;
 import won.spoco.raid.bot.event.CreateRaidAtomEvent;
 import won.spoco.raid.bot.event.DeleteRaidAtomEvent;
-import won.spoco.raid.bot.event.EditRaidAtomEvent;
+import won.spoco.raid.bot.event.ModifyRaidAtomEvent;
 import won.spoco.raid.bot.model.Raid;
 
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class RaidBot extends EventBot {
     private static final Logger logger = LoggerFactory.getLogger(RaidBot.class);
@@ -81,7 +83,7 @@ public class RaidBot extends EventBot {
                                     Raid storedRaid = botContextWrapper.getRaid(activeRaid);
                                     if (storedRaid.hasUpdatedInformation(activeRaid)) {
                                         logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + storedRaid);
-                                        bus.publish(new EditRaidAtomEvent(activeRaid));
+                                        bus.publish(new ModifyRaidAtomEvent(activeRaid));
                                     } else {
                                         logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
                                     }
@@ -135,13 +137,7 @@ public class RaidBot extends EventBot {
 
         bus.subscribe(CreateRaidAtomEvent.class, new ActionOnEventListener(ctx, new CreateRaidAtomAction(ctx)));
         bus.subscribe(DeleteRaidAtomEvent.class, new ActionOnEventListener(ctx, new DeleteRaidAtomAction(ctx)));
-
-        bus.subscribe(EditRaidAtomEvent.class, new ActionOnEventListener(ctx, new BaseEventBotAction(ctx) {
-            @Override
-            protected void doRun(Event event, EventListener executingListener) throws Exception {
-                //TODO: UPDATE THE RAID-ATOM
-            }
-        }));
+        bus.subscribe(ModifyRaidAtomEvent.class, new ActionOnEventListener(ctx, new ModifyRaidAtomAction(ctx)));
 
         bus.subscribe(ConnectFromOtherAtomEvent.class, new ActionOnEventListener(ctx, new BaseEventBotAction(ctx) {
             @Override
