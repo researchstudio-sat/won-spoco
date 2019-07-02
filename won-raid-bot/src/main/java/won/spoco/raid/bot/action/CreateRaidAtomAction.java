@@ -38,8 +38,8 @@ import java.util.Locale;
 public class CreateRaidAtomAction extends AbstractCreateAtomAction {
     private static final Logger logger = LoggerFactory.getLogger(CreateRaidAtomAction.class);
 
-    public CreateRaidAtomAction(EventListenerContext eventListenerContext, URI... sockets) {
-        super(eventListenerContext, sockets);
+    public CreateRaidAtomAction(EventListenerContext eventListenerContext) {
+        super(eventListenerContext);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         RaidBotContextWrapper botContextWrapper = (RaidBotContextWrapper) ctx.getBotContextWrapper();
         CreateRaidAtomEvent createRaidAtomEvent = (CreateRaidAtomEvent) event;
 
-        Raid raidToCreate = createRaidAtomEvent.getRaid();
+        final Raid raidToCreate = createRaidAtomEvent.getRaid();
 
         if (botContextWrapper.getAtomUriForRaid(raidToCreate) != null) {
             logger.warn("RaidAtom already exists, URI: " + botContextWrapper.getAtomUriForRaid(raidToCreate));
@@ -64,7 +64,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         final URI atomURI = wonNodeInformationService.generateAtomURI(wonNodeUri);
         Dataset dataset = this.generateRaidAtomStructure(atomURI, raidToCreate);
         logger.debug("creating atom on won node {} with content {} ", wonNodeUri, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
-        WonMessage createAtomMessage = createWonMessage(wonNodeInformationService, atomURI, wonNodeUri, dataset,false, false);
+        WonMessage createAtomMessage = createWonMessage(atomURI, dataset);
         EventBotActionUtils.rememberInList(ctx, atomURI, uriListName);
         EventBus bus = ctx.getEventBus();
         EventListener successCallback = new EventListener() {
@@ -93,7 +93,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
     }
 
     private Dataset generateRaidAtomStructure(URI atomURI, Raid raid) {
-        DefaultAtomModelWrapper atomModelWrapper = new DefaultAtomModelWrapper(atomURI.toString());
+        DefaultAtomModelWrapper atomModelWrapper = new DefaultAtomModelWrapper(atomURI);
         Resource atom = atomModelWrapper.getAtomModel().createResource(atomURI.toString());
 
         //Default Data & Information
