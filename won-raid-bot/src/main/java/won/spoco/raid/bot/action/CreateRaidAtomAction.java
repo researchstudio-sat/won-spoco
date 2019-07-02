@@ -133,8 +133,6 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
             atom.addLiteral(WXPOGO.gymEx, true);
         }
 
-        //TODO: IMPLEMENT CORRECT STRUCTURE
-        // s:jobLocation
         Resource raidLocation = atom.getModel().createResource();
 
         raidLocation.addProperty(RDF.type, SCHEMA.PLACE);
