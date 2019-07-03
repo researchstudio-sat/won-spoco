@@ -115,7 +115,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         if(raid.getLevel() > 0) {
             raidResource.addLiteral(WXPOGO.level, raid.getLevel());
         }
-        if(raid.getPokedexId() != -1) {
+        if(raid.getPokedexId() > 0) {
             raidResource.addLiteral(WXPOGO.pokemonId, raid.getPokedexId());
         }
         if(raid.getPokemonForm() != null) {

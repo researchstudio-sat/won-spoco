@@ -41,11 +41,21 @@
     <bean id="botContextWrapper" class="won.spoco.raid.bot.impl.RaidBotContextWrapper">
         <constructor-arg name="botContext" ref="${botContext.impl}"/>
         <constructor-arg name="botName" value="${raidbot.name}"/>
-        <constructor-arg name="raidFetcher" ref="raidFetcher"/>
+        <constructor-arg name="raidFetcherList">
+            <list>
+                <ref bean="raidFetcherVienna"/>
+                <ref bean="raidFetcherLinz" />
+            </list>
+        </constructor-arg>
     </bean>
 
-    <bean id="raidFetcher" class="won.spoco.raid.bot.api.RaidFetcherImpl">
-        <constructor-arg name="endpoint" value="${api.endpoint}"/>
-        <constructor-arg name="token" value="${api.token}"/>
+    <bean id="raidFetcherLinz" class="won.spoco.raid.bot.api.RaidFetcherLinzImpl">
+        <constructor-arg name="endpoint" value="${api.linz.endpoint}"/>
+        <constructor-arg name="token" value="${api.linz.token}"/>
+    </bean>
+    <bean id="raidFetcherVienna" class="won.spoco.raid.bot.api.RaidFetcherViennaImpl">
+        <constructor-arg name="endpoint" value="${api.vienna.endpoint}"/>
+        <constructor-arg name="username" value="${api.vienna.username}"/>
+        <constructor-arg name="request" value="${api.vienna.request}"/>
     </bean>
 </beans>

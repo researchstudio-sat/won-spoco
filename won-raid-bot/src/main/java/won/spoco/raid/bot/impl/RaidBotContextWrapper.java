@@ -8,20 +8,22 @@ import won.spoco.raid.bot.model.Raid;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RaidBotContextWrapper extends BotContextWrapper {
-    private RaidFetcher raidFetcher;
+    private final List<RaidFetcher> raidFetcherList;
+
     public String raidIdToRaidMap = getBotName() + ":raidIdToRaidMap";
     public String raidIdToAtomUriMap = getBotName() + ":raidIdToAtomUriMap";
 
-    public RaidBotContextWrapper(BotContext botContext, String botName, RaidFetcher raidFetcher) {
+    public RaidBotContextWrapper(BotContext botContext, String botName, List<RaidFetcher> raidFetcherList) {
         super(botContext, botName);
-        this.raidFetcher = raidFetcher;
+        this.raidFetcherList = raidFetcherList;
     }
 
-    public RaidFetcher getRaidFetcher(){
-        return raidFetcher;
+    public List<RaidFetcher> getRaidFetcherList() {
+        return raidFetcherList;
     }
 
     public boolean raidExists(Raid raid) {

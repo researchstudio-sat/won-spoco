@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface RaidFetcher {
 
-    public List<Raid> getActiveRaids();
+    <R extends Raid> List<R> getActiveRaids();
 }

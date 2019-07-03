@@ -35,7 +35,6 @@ import won.spoco.raid.bot.model.Raid;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 public class RaidBot extends EventBot {
     private static final Logger logger = LoggerFactory.getLogger(RaidBot.class);
@@ -75,21 +74,24 @@ public class RaidBot extends EventBot {
                         @Override
                         protected void doRun(Event event, EventListener executingListener) throws Exception {
                             logger.debug("Fetching Raids ------------------------------------------------------------------");
-                            RaidFetcher rf = botContextWrapper.getRaidFetcher();
-                            List<Raid> activeRaids = rf.getActiveRaids();
+                            List<RaidFetcher> raidFetcherList = botContextWrapper.getRaidFetcherList();
+                            for(RaidFetcher rf : raidFetcherList) {
+                                logger.debug("Fetching Raids of: ", rf.toString());
+                                List<Raid> activeRaids = rf.getActiveRaids();
 
-                            for (Raid activeRaid : activeRaids) {
-                                if (botContextWrapper.raidExists(activeRaid)) {
-                                    Raid storedRaid = botContextWrapper.getRaid(activeRaid);
-                                    if (storedRaid.hasUpdatedInformation(activeRaid)) {
-                                        logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + storedRaid);
-                                        bus.publish(new ModifyRaidAtomEvent(activeRaid));
+                                for (Raid activeRaid : activeRaids) {
+                                    if (botContextWrapper.raidExists(activeRaid)) {
+                                        Raid storedRaid = botContextWrapper.getRaid(activeRaid);
+                                        if (storedRaid.hasUpdatedInformation(activeRaid)) {
+                                            logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + storedRaid);
+                                            bus.publish(new ModifyRaidAtomEvent(activeRaid));
+                                        } else {
+                                            logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
+                                        }
                                     } else {
-                                        logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
+                                        logger.debug(activeRaid.getId() + ": Raid is new, storing information: " + activeRaid);
+                                        bus.publish(new CreateRaidAtomEvent(activeRaid));
                                     }
-                                } else {
-                                    logger.debug(activeRaid.getId() + ": Raid is new, storing information: " + activeRaid);
-                                    bus.publish(new CreateRaidAtomEvent(activeRaid));
                                 }
                             }
                             logger.debug("---------------------------------------------------------------------------------");
