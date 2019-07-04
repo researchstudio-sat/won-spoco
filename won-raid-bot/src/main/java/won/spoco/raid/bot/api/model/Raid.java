@@ -1,4 +1,4 @@
-package won.spoco.raid.bot.model;
+package won.spoco.raid.bot.api.model;
 
 import java.io.Serializable;
 import java.util.Date;

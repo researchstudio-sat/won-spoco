@@ -3,7 +3,7 @@ package won.spoco.raid.bot.impl;
 import won.bot.framework.bot.context.BotContext;
 import won.bot.framework.bot.context.BotContextWrapper;
 import won.spoco.raid.bot.api.RaidFetcher;
-import won.spoco.raid.bot.model.Raid;
+import won.spoco.raid.bot.api.model.Raid;
 
 import java.net.URI;
 import java.util.Collection;

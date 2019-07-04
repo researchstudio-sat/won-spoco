@@ -12,7 +12,7 @@ import won.protocol.message.WonMessage;
 import won.protocol.util.WonRdfUtils;
 import won.spoco.raid.bot.event.DeleteRaidAtomEvent;
 import won.spoco.raid.bot.impl.RaidBotContextWrapper;
-import won.spoco.raid.bot.model.Raid;
+import won.spoco.raid.bot.api.model.Raid;
 
 import java.net.URI;
 

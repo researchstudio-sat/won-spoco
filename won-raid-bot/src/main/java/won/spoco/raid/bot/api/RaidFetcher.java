@@ -1,6 +1,6 @@
 package won.spoco.raid.bot.api;
 
-import won.spoco.raid.bot.model.Raid;
+import won.spoco.raid.bot.api.model.Raid;
 
 import java.util.List;
 

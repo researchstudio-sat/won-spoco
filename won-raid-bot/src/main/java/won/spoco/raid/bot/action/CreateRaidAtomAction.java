@@ -27,7 +27,7 @@ import won.protocol.vocabulary.*;
 import won.spoco.core.protocol.vocabulary.WXPOGO;
 import won.spoco.raid.bot.event.CreateRaidAtomEvent;
 import won.spoco.raid.bot.impl.RaidBotContextWrapper;
-import won.spoco.raid.bot.model.Raid;
+import won.spoco.raid.bot.api.model.Raid;
 
 import java.math.RoundingMode;
 import java.net.URI;

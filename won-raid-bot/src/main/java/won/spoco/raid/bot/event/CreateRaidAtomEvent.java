@@ -1,7 +1,7 @@
 package won.spoco.raid.bot.event;
 
 import won.bot.framework.eventbot.event.BaseEvent;
-import won.spoco.raid.bot.model.Raid;
+import won.spoco.raid.bot.api.model.Raid;
 
 public class CreateRaidAtomEvent extends BaseEvent {
     private final Raid raid;
