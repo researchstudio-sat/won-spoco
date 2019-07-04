@@ -69,29 +69,26 @@ public class RaidBot extends EventBot {
                     new BaseEventBotAction(ctx) {
                         @Override
                         protected void doRun(Event event, EventListener executingListener) {
-                            logger.debug("Fetching Raids ------------------------------------------------------------------");
                             List<RaidFetcher> raidFetcherList = botContextWrapper.getRaidFetcherList();
                             for(RaidFetcher rf : raidFetcherList) {
-                                logger.debug("Fetching Raids of: {}", rf.toString());
+                                logger.debug("Fetching Raids: Fetcher - {}", rf.toString());
                                 List<Raid> activeRaids = rf.getActiveRaids();
 
                                 for (Raid activeRaid : activeRaids) {
                                     if (botContextWrapper.raidExists(activeRaid)) {
                                         Raid storedRaid = botContextWrapper.getRaid(activeRaid);
                                         if (storedRaid.hasUpdatedInformation(activeRaid)) {
-                                            logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + storedRaid);
+                                            logger.debug("Fetching Raids: " + activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + storedRaid);
                                             bus.publish(new ModifyRaidAtomEvent(activeRaid));
                                         } else {
-                                            logger.trace(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
+                                            logger.trace("Fetching Raids: " + activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
                                         }
                                     } else {
-                                        logger.debug(activeRaid.getId() + ": Raid is new, storing information: " + activeRaid);
+                                        logger.debug("Fetching Raids: " + activeRaid.getId() + ": Raid is new, storing information: " + activeRaid);
                                         bus.publish(new CreateRaidAtomEvent(activeRaid));
                                     }
                                 }
                             }
-                            logger.debug("---------------------------------------------------------------------------------");
-                            logger.debug("  ");
                         }
                     }));
             bus.publish(new StartBotTriggerCommandEvent(fetchRaidsTrigger));
@@ -106,28 +103,25 @@ public class RaidBot extends EventBot {
                 new BaseEventBotAction(ctx) {
                     @Override
                     protected void doRun(Event event, EventListener executingListener) {
-                        logger.debug("Sanitizing Raids ----------------------------------------------------------------");
                         Collection<Raid> storedRaids = botContextWrapper.getAllRaids();
 
                         if(storedRaids.size() > 0) {
                             long expirationThreshold = System.currentTimeMillis() + raidExpirationThreshold * 1000;
                             for (Raid storedRaid : storedRaids) {
                                 if (storedRaid.isExpired(expirationThreshold)) {
-                                    logger.debug(storedRaid.getId() + ": Raid is expired, proceed to remove: " + "("+botContextWrapper.getAtomUriForRaid(storedRaid)+") :" + storedRaid);
+                                    logger.debug("Sanitizing Raids: " + storedRaid.getId() + ": Raid is expired, proceed to remove: " + "("+botContextWrapper.getAtomUriForRaid(storedRaid)+") :" + storedRaid);
                                     bus.publish(new DeleteRaidAtomEvent(storedRaid));
                                 } else {
-                                    logger.trace(storedRaid.getId() + ": Raid is still active, do not remove: " + "(" + botContextWrapper.getAtomUriForRaid(storedRaid) + ") :" + storedRaid);
+                                    logger.trace("Sanitizing Raids: " + storedRaid.getId() + ": Raid is still active, do not remove: " + "(" + botContextWrapper.getAtomUriForRaid(storedRaid) + ") :" + storedRaid);
                                 }
                             }
                         } else {
                             if(phaseOut) {
                                 logger.info(botContextWrapper.getBotName() + " is in PhaseOut mode and has been cleared, you may shut down the bot now");
                             } else {
-                                logger.info("no Raids stored");
+                                logger.info("Sanitizing Raids: " + "no Raids stored");
                             }
                         }
-                        logger.debug("---------------------------------------------------------------------------------");
-                        logger.debug("  ");
                     }
                 }));
 
