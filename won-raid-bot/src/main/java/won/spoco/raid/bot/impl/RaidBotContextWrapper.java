@@ -14,8 +14,8 @@ import java.util.Map;
 public class RaidBotContextWrapper extends BotContextWrapper {
     private final List<RaidFetcher> raidFetcherList;
 
-    public String raidIdToRaidMap = getBotName() + ":raidIdToRaidMap";
-    public String raidIdToAtomUriMap = getBotName() + ":raidIdToAtomUriMap";
+    private final String raidIdToRaidMap = getBotName() + ":raidIdToRaidMap";
+    private final String raidIdToAtomUriMap = getBotName() + ":raidIdToAtomUriMap";
 
     public RaidBotContextWrapper(BotContext botContext, String botName, List<RaidFetcher> raidFetcherList) {
         super(botContext, botName);

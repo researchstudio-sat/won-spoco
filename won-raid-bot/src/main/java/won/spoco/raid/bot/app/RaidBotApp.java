@@ -4,10 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class RaidBotApp {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication app = new SpringApplication(
-                new Object[]{"classpath:/spring/app/raidBotApp.xml"}
-        );
+                "classpath:/spring/app/raidBotApp.xml");
         app.setWebEnvironment(false);
         ConfigurableApplicationContext applicationContext =  app.run(args);
         //Thread.sleep(5*60*1000);

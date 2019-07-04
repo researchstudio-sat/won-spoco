@@ -13,9 +13,9 @@ import won.bot.framework.eventbot.listener.EventListener;
 import won.protocol.message.WonMessage;
 import won.protocol.util.RdfUtils;
 import won.protocol.util.WonRdfUtils;
+import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.event.ModifyRaidAtomEvent;
 import won.spoco.raid.bot.impl.RaidBotContextWrapper;
-import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.util.RaidAtomModelWrapper;
 
 import java.net.URI;
@@ -28,7 +28,7 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
     }
 
     @Override
-    protected void doRun(Event event, EventListener executingListener) throws Exception {
+    protected void doRun(Event event, EventListener executingListener) {
         EventListenerContext ctx = getEventListenerContext();
         if (!(ctx.getBotContextWrapper() instanceof RaidBotContextWrapper) || !(event instanceof ModifyRaidAtomEvent)) {
             logger.error("ModifyRaidAtomAction does not work without a RaidBotContextWrapper and ModifyRaidAtomEvent");
@@ -53,18 +53,17 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
 
         EventListener successCallback = new EventListener() {
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 logger.debug("atom modification successful, atom URI of modified atom is {}", atomURI);
                 botContextWrapper.addRaid(modifiedRaid, atomURI);
             }
         };
         EventListener failureCallback = new EventListener() {
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 String textMessage = WonRdfUtils.MessageUtils
                         .getTextMessage(((FailureResponseEvent) event).getFailureMessage());
-                logger.error("atom modificaiton failed for atom URI {}, original message URI {}: {}", new Object[] {
-                        atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage });
+                logger.error("atom modificaiton failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
             }
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(modifyAtomMessage, successCallback, failureCallback, ctx);

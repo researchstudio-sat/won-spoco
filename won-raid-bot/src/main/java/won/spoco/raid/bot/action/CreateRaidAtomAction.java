@@ -16,9 +16,9 @@ import won.protocol.message.WonMessage;
 import won.protocol.service.WonNodeInformationService;
 import won.protocol.util.RdfUtils;
 import won.protocol.util.WonRdfUtils;
+import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.event.CreateRaidAtomEvent;
 import won.spoco.raid.bot.impl.RaidBotContextWrapper;
-import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.util.RaidAtomModelWrapper;
 
 import java.net.URI;
@@ -31,7 +31,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
     }
 
     @Override
-    protected void doRun(Event event, EventListener executingListener) throws Exception {
+    protected void doRun(Event event, EventListener executingListener) {
         EventListenerContext ctx = getEventListenerContext();
         if (!(ctx.getBotContextWrapper() instanceof RaidBotContextWrapper) || !(event instanceof CreateRaidAtomEvent)) {
             logger.error("CreateRaidAtomAction does not work without a RaidBotContextWrapper and CreateRaidAtomEvent");
@@ -57,7 +57,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         EventBus bus = ctx.getEventBus();
         EventListener successCallback = new EventListener() {
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 logger.debug("atom creation successful, new atom URI is {}", atomURI);
                 bus.publish(new AtomCreatedEvent(atomURI, wonNodeUri, dataset, null));
                 botContextWrapper.addRaid(raidToCreate, atomURI);
@@ -65,11 +65,10 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         };
         EventListener failureCallback = new EventListener() {
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 String textMessage = WonRdfUtils.MessageUtils
                         .getTextMessage(((FailureResponseEvent) event).getFailureMessage());
-                logger.error("atom creation failed for atom URI {}, original message URI {}: {}", new Object[] {
-                        atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage });
+                logger.error("atom creation failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
                 EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
                 botContextWrapper.removeRaid(raidToCreate);
             }

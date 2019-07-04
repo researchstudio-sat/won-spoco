@@ -107,7 +107,5 @@ public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
         this.addSocket("#GroupSocket", WXGROUP.GroupSocketString);
         this.setDefaultSocket("#GroupSocket");
         this.addFlag(WONMATCH.NoHintForMe);
-
-        /*return this.copyDataset();*/
     }
 }

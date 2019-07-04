@@ -5,17 +5,17 @@ import java.util.Date;
 import java.util.Objects;
 
 public abstract class Raid implements Serializable {
-    private String id;
+    private final String id;
     private int level = -1;
     private int pokedexId = -1;
-    private String pokemonForm;
-    private double gymLat;
-    private double gymLng;
-    private String gymName;
-    private String gymInfo;
-    private boolean gymEx;
-    private Date hatchDate;
-    private Date endDate;
+    private final String pokemonForm;
+    private final double gymLat;
+    private final double gymLng;
+    private final String gymName;
+    private final String gymInfo;
+    private final boolean gymEx;
+    private final Date hatchDate;
+    private final Date endDate;
 
     Raid(String id, int level, int pokedexId, String pokemonForm, String gymName, double gymLat, double gymLng, String gymInfo, boolean gymEx, Date hatchDate, Date endDate) {
         this.id = id;

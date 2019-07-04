@@ -19,9 +19,9 @@ import org.apache.jena.rdf.model.Resource;
  * WoN Vocabulary Extension POGO (Pokemon Go)
  */
 public class WXPOGO {
-    public static final String BASE_URI = "https://w3id.org/won/core#"; //TODO: change to "https://w3id.org/won/ext/pogo#" once won.js and pokemon.js was updated
+    private static final String BASE_URI = "https://w3id.org/won/core#"; //TODO: change to "https://w3id.org/won/ext/pogo#" once won.js and pokemon.js was updated
     public static final String DEFAULT_PREFIX = "won"; //TODO: change to "wx-pogo"
-    private static Model m = ModelFactory.createDefaultModel();
+    private static final Model m = ModelFactory.createDefaultModel();
 
     public static final Property gymEx = m.createProperty(BASE_URI, "gymex");
     public static final Property raid = m.createProperty(BASE_URI, "raid");

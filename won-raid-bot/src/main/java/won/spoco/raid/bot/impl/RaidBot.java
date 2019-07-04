@@ -2,7 +2,6 @@ package won.spoco.raid.bot.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import won.bot.framework.bot.base.EventBot;
 import won.bot.framework.eventbot.EventListenerContext;
@@ -27,10 +26,10 @@ import won.spoco.raid.bot.action.CreateRaidAtomAction;
 import won.spoco.raid.bot.action.DeleteRaidAtomAction;
 import won.spoco.raid.bot.action.ModifyRaidAtomAction;
 import won.spoco.raid.bot.api.RaidFetcher;
+import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.event.CreateRaidAtomEvent;
 import won.spoco.raid.bot.event.DeleteRaidAtomEvent;
 import won.spoco.raid.bot.event.ModifyRaidAtomEvent;
-import won.spoco.raid.bot.api.model.Raid;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -38,9 +37,6 @@ import java.util.List;
 
 public class RaidBot extends EventBot {
     private static final Logger logger = LoggerFactory.getLogger(RaidBot.class);
-
-    @Autowired
-
 
     @Value("${raidbot.fetchInterval}")
     private int raidFetchInterval; //in seconds
@@ -72,11 +68,11 @@ public class RaidBot extends EventBot {
             bus.subscribe(BotTriggerEvent.class, new ActionOnTriggerEventListener(ctx, fetchRaidsTrigger,
                     new BaseEventBotAction(ctx) {
                         @Override
-                        protected void doRun(Event event, EventListener executingListener) throws Exception {
+                        protected void doRun(Event event, EventListener executingListener) {
                             logger.debug("Fetching Raids ------------------------------------------------------------------");
                             List<RaidFetcher> raidFetcherList = botContextWrapper.getRaidFetcherList();
                             for(RaidFetcher rf : raidFetcherList) {
-                                logger.debug("Fetching Raids of: ", rf.toString());
+                                logger.debug("Fetching Raids of: {}", rf.toString());
                                 List<Raid> activeRaids = rf.getActiveRaids();
 
                                 for (Raid activeRaid : activeRaids) {
@@ -86,7 +82,7 @@ public class RaidBot extends EventBot {
                                             logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + storedRaid);
                                             bus.publish(new ModifyRaidAtomEvent(activeRaid));
                                         } else {
-                                            logger.debug(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
+                                            logger.trace(activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
                                         }
                                     } else {
                                         logger.debug(activeRaid.getId() + ": Raid is new, storing information: " + activeRaid);
@@ -109,7 +105,7 @@ public class RaidBot extends EventBot {
         bus.subscribe(BotTriggerEvent.class, new ActionOnTriggerEventListener(ctx, sanitizeRaidsTrigger,
                 new BaseEventBotAction(ctx) {
                     @Override
-                    protected void doRun(Event event, EventListener executingListener) throws Exception {
+                    protected void doRun(Event event, EventListener executingListener) {
                         logger.debug("Sanitizing Raids ----------------------------------------------------------------");
                         Collection<Raid> storedRaids = botContextWrapper.getAllRaids();
 
@@ -120,7 +116,7 @@ public class RaidBot extends EventBot {
                                     logger.debug(storedRaid.getId() + ": Raid is expired, proceed to remove: " + "("+botContextWrapper.getAtomUriForRaid(storedRaid)+") :" + storedRaid);
                                     bus.publish(new DeleteRaidAtomEvent(storedRaid));
                                 } else {
-                                    logger.debug(storedRaid.getId() + ": Raid is still active, do not remove: " + "("+botContextWrapper.getAtomUriForRaid(storedRaid)+") :"  + storedRaid);
+                                    logger.trace(storedRaid.getId() + ": Raid is still active, do not remove: " + "(" + botContextWrapper.getAtomUriForRaid(storedRaid) + ") :" + storedRaid);
                                 }
                             }
                         } else {
@@ -143,7 +139,7 @@ public class RaidBot extends EventBot {
 
         bus.subscribe(ConnectFromOtherAtomEvent.class, new ActionOnEventListener(ctx, new BaseEventBotAction(ctx) {
             @Override
-            protected void doRun(Event event, EventListener executingListener) throws Exception {
+            protected void doRun(Event event, EventListener executingListener) {
                 EventListenerContext ctx = getEventListenerContext();
                 if (!(ctx.getBotContextWrapper() instanceof RaidBotContextWrapper) || !(event instanceof ConnectFromOtherAtomEvent)) {
                     logger.error(ctx.getBotContextWrapper().getBotName() + ": ConnectFromOtherAtomEvent does not work without a RaidBotContextWrapper and ConnectFromOtherAtomEvent");
@@ -157,7 +153,7 @@ public class RaidBot extends EventBot {
                     ctx.getEventBus().subscribe(OpenCommandResultEvent.class, new ActionOnFirstEventListener(ctx,
                             new CommandResultFilter(openCommandEvent), new BaseEventBotAction(ctx) {
                         @Override
-                        protected void doRun(Event event, EventListener executingListener) throws Exception {
+                        protected void doRun(Event event, EventListener executingListener) {
                             OpenCommandResultEvent connectionMessageCommandResultEvent = (OpenCommandResultEvent) event;
                             if (!connectionMessageCommandResultEvent.isSuccess()) {
                                 logger.error("Failure when trying to open a received Request: " + connectionMessageCommandResultEvent.getMessage());
