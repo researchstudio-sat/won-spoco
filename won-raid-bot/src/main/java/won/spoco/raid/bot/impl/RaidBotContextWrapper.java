@@ -4,6 +4,7 @@ import won.bot.framework.bot.context.BotContext;
 import won.bot.framework.bot.context.BotContextWrapper;
 import won.spoco.raid.bot.api.RaidFetcher;
 import won.spoco.raid.bot.api.model.Raid;
+import won.spoco.raid.bot.impl.model.ContextRaid;
 
 import java.net.URI;
 import java.util.Collection;
@@ -34,21 +35,21 @@ public class RaidBotContextWrapper extends BotContextWrapper {
         return getRaid(id) != null;
     }
 
-    public Raid getRaid(Raid raid) {
+    public ContextRaid getRaid(Raid raid) {
         return getRaid(raid.getId());
     }
 
-    public Raid getRaid(String id) {
-        return (Raid) this.getBotContext().loadFromObjectMap(raidIdToRaidMap, id);
+    public ContextRaid getRaid(String id) {
+        return (ContextRaid) this.getBotContext().loadFromObjectMap(raidIdToRaidMap, id);
     }
 
-    public void addRaid(Raid raid, URI atomURI) {
-        this.getBotContext().saveToObjectMap(raidIdToAtomUriMap, raid.getId(), atomURI);
-        this.getBotContext().saveToObjectMap(raidIdToRaidMap, raid.getId(), raid);
+    public void addRaid(ContextRaid contextRaid, URI atomURI) {
+        this.getBotContext().saveToObjectMap(raidIdToAtomUriMap, contextRaid.getId(), atomURI);
+        this.getBotContext().saveToObjectMap(raidIdToRaidMap, contextRaid.getId(), contextRaid);
     }
 
-    public void removeRaid(Raid raid) {
-        removeRaid(raid.getId());
+    public void removeRaid(ContextRaid contextRaid) {
+        removeRaid(contextRaid.getId());
     }
 
     public void removeRaid(String raidId) {
@@ -56,25 +57,24 @@ public class RaidBotContextWrapper extends BotContextWrapper {
         this.getBotContext().removeFromObjectMap(raidIdToAtomUriMap, raidId);
     }
 
-    public Map<String, Raid> getAllRaidsMap() {
+    public Map<String, ContextRaid> getAllRaidsMap() {
         Map<String, Object> raidObjectMap = this.getBotContext().loadObjectMap(raidIdToRaidMap);
-        Map<String, Raid> raidMap = new HashMap<>(raidObjectMap.size());
+        Map<String, ContextRaid> raidMap = new HashMap<>(raidObjectMap.size());
 
         for (Object raidObject : raidObjectMap.values()) {
-            Raid raid = (Raid) raidObject;
+            ContextRaid raid = (ContextRaid) raidObject;
             raidMap.put(raid.getId(), raid);
         }
 
         return raidMap;
     }
 
-    public Collection<Raid> getAllRaids() {
+    public Collection<ContextRaid> getAllRaids() {
         return getAllRaidsMap().values();
     }
 
-
-    public URI getAtomUriForRaid(Raid raid) {
-        return getAtomUriForRaid(raid.getId());
+    public URI getAtomUriForRaid(ContextRaid contextRaid) {
+        return getAtomUriForRaid(contextRaid.getId());
     }
 
     public URI getAtomUriForRaid(String raidId) {

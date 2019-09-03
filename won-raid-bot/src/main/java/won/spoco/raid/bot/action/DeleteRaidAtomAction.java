@@ -10,9 +10,9 @@ import won.bot.framework.eventbot.event.impl.wonmessage.FailureResponseEvent;
 import won.bot.framework.eventbot.listener.EventListener;
 import won.protocol.message.WonMessage;
 import won.protocol.util.WonRdfUtils;
-import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.event.DeleteRaidAtomEvent;
 import won.spoco.raid.bot.impl.RaidBotContextWrapper;
+import won.spoco.raid.bot.impl.model.ContextRaid;
 
 import java.net.URI;
 
@@ -33,7 +33,7 @@ public class DeleteRaidAtomAction extends AbstractDeleteAtomAction {
         RaidBotContextWrapper botContextWrapper = (RaidBotContextWrapper) ctx.getBotContextWrapper();
         DeleteRaidAtomEvent deleteRaidAtomEvent = (DeleteRaidAtomEvent) event;
 
-        final Raid raidToDelete = deleteRaidAtomEvent.getRaid();
+        final ContextRaid raidToDelete = deleteRaidAtomEvent.getContextRaid();
 
         if (botContextWrapper.getAtomUriForRaid(raidToDelete) == null) {
             logger.warn("RaidAtom does not exist in the botContext(must have been deleted) no deletion possible: " + raidToDelete);
@@ -50,8 +50,8 @@ public class DeleteRaidAtomAction extends AbstractDeleteAtomAction {
             @Override
             public void onEvent(Event event) {
                 logger.debug("atom deletion successful, URI was {}", atomURI);
-                EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
                 botContextWrapper.removeRaid(raidToDelete);
+                EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
             }
         };
         EventListener failureCallback = new EventListener() {

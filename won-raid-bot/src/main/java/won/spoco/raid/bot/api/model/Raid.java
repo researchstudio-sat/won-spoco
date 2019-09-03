@@ -1,5 +1,7 @@
 package won.spoco.raid.bot.api.model;
 
+import won.spoco.raid.bot.impl.model.ContextRaid;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -49,32 +51,6 @@ public abstract class Raid implements Serializable {
         this.endDate = endDate;
     }
 
-    // Helper Methods
-
-    public final boolean isExpired() {
-        return isExpired(System.currentTimeMillis());
-    }
-
-    public final boolean isExpired(long currentTimeInMillis) {
-        return new Date(currentTimeInMillis).after(getEndDate());
-    }
-
-    public final boolean hasUpdatedInformation(Raid raid) {
-        if (this == raid) return false;
-        if (raid == null) return false;
-
-        return !(getLevel() == raid.getLevel() &&
-                Objects.equals(getHatchDate(), raid.getHatchDate()) &&
-                Objects.equals(getEndDate(), raid.getEndDate()) &&
-                Double.compare(raid.getGymLat(), getGymLat()) == 0 &&
-                Double.compare(raid.getGymLng(), getGymLng()) == 0 &&
-                isGymEx() == raid.isGymEx() &&
-                Objects.equals(this.getId(), raid.getId()) &&
-                this.getPokedexId() == raid.getPokedexId() &&
-                Objects.equals(getGymName(), raid.getGymName()) &&
-                Objects.equals(getGymInfo(), raid.getGymInfo()));
-    }
-
     // Generic Getter
     public final String getId() {
         return this.id;
@@ -117,6 +93,11 @@ public abstract class Raid implements Serializable {
 
     public final String getPokemonForm() {
         return pokemonForm;
+    }
+
+    // Helper Methods
+    public ContextRaid buildContextRaid() {
+        return new ContextRaid(id, level, pokedexId, pokemonForm, gymName, gymLat, gymLng, gymInfo, gymEx, hatchDate, endDate);
     }
 
     // Overrides

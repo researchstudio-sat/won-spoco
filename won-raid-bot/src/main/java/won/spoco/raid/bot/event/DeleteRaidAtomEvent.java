@@ -1,16 +1,16 @@
 package won.spoco.raid.bot.event;
 
 import won.bot.framework.eventbot.event.BaseEvent;
-import won.spoco.raid.bot.api.model.Raid;
+import won.spoco.raid.bot.impl.model.ContextRaid;
 
 public class DeleteRaidAtomEvent extends BaseEvent {
-    private final Raid raid;
+    private final ContextRaid contextRaid;
 
-    public DeleteRaidAtomEvent(Raid raid) {
-        this.raid = raid;
+    public DeleteRaidAtomEvent(ContextRaid contextRaid) {
+        this.contextRaid = contextRaid;
     }
 
-    public Raid getRaid() {
-        return raid;
+    public ContextRaid getContextRaid() {
+        return contextRaid;
     }
 }

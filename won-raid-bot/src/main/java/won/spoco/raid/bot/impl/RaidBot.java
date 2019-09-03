@@ -30,6 +30,7 @@ import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.event.CreateRaidAtomEvent;
 import won.spoco.raid.bot.event.DeleteRaidAtomEvent;
 import won.spoco.raid.bot.event.ModifyRaidAtomEvent;
+import won.spoco.raid.bot.impl.model.ContextRaid;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -76,16 +77,16 @@ public class RaidBot extends EventBot {
 
                                 for (Raid activeRaid : activeRaids) {
                                     if (botContextWrapper.raidExists(activeRaid)) {
-                                        Raid storedRaid = botContextWrapper.getRaid(activeRaid);
-                                        if (storedRaid.hasUpdatedInformation(activeRaid)) {
-                                            logger.debug("Fetching Raids: " + activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + storedRaid);
-                                            bus.publish(new ModifyRaidAtomEvent(activeRaid));
+                                        ContextRaid contextRaid = botContextWrapper.getRaid(activeRaid);
+                                        if (contextRaid.hasUpdatedInformation(activeRaid)) {
+                                            logger.debug("Fetching Raids: " + activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(contextRaid) + "): Information has changed: New Information: " + activeRaid + " / Old Information: " + contextRaid);
+                                            bus.publish(new ModifyRaidAtomEvent(activeRaid.buildContextRaid()));
                                         } else {
-                                            logger.trace("Fetching Raids: " + activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(storedRaid) + "): Information has not changed: " + activeRaid);
+                                            logger.trace("Fetching Raids: " + activeRaid.getId() + ": Raid exists: (" + botContextWrapper.getAtomUriForRaid(contextRaid) + "): Information has not changed: " + activeRaid);
                                         }
                                     } else {
                                         logger.debug("Fetching Raids: " + activeRaid.getId() + ": Raid is new, storing information: " + activeRaid);
-                                        bus.publish(new CreateRaidAtomEvent(activeRaid));
+                                        bus.publish(new CreateRaidAtomEvent(activeRaid.buildContextRaid()));
                                     }
                                 }
                             }
@@ -103,16 +104,16 @@ public class RaidBot extends EventBot {
                 new BaseEventBotAction(ctx) {
                     @Override
                     protected void doRun(Event event, EventListener executingListener) {
-                        Collection<Raid> storedRaids = botContextWrapper.getAllRaids();
+                        Collection<ContextRaid> storedRaids = botContextWrapper.getAllRaids();
 
                         if(storedRaids.size() > 0) {
                             long expirationThreshold = System.currentTimeMillis() + raidExpirationThreshold * 1000;
-                            for (Raid storedRaid : storedRaids) {
-                                if (storedRaid.isExpired(expirationThreshold)) {
-                                    logger.debug("Sanitizing Raids: " + storedRaid.getId() + ": Raid is expired, proceed to remove: " + "("+botContextWrapper.getAtomUriForRaid(storedRaid)+") :" + storedRaid);
-                                    bus.publish(new DeleteRaidAtomEvent(storedRaid));
+                            for (ContextRaid contextRaid : storedRaids) {
+                                if (contextRaid.isExpired(expirationThreshold)) {
+                                    logger.debug("Sanitizing Raids: " + contextRaid.getId() + ": Raid is expired, proceed to remove: " + "("+botContextWrapper.getAtomUriForRaid(contextRaid)+") :" + contextRaid);
+                                    bus.publish(new DeleteRaidAtomEvent(contextRaid));
                                 } else {
-                                    logger.trace("Sanitizing Raids: " + storedRaid.getId() + ": Raid is still active, do not remove: " + "(" + botContextWrapper.getAtomUriForRaid(storedRaid) + ") :" + storedRaid);
+                                    logger.trace("Sanitizing Raids: " + contextRaid.getId() + ": Raid is still active, do not remove: " + "(" + botContextWrapper.getAtomUriForRaid(contextRaid) + ") :" + contextRaid);
                                 }
                             }
                         } else {

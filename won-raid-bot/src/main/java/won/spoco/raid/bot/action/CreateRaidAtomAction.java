@@ -16,9 +16,9 @@ import won.protocol.message.WonMessage;
 import won.protocol.service.WonNodeInformationService;
 import won.protocol.util.RdfUtils;
 import won.protocol.util.WonRdfUtils;
-import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.event.CreateRaidAtomEvent;
 import won.spoco.raid.bot.impl.RaidBotContextWrapper;
+import won.spoco.raid.bot.impl.model.ContextRaid;
 import won.spoco.raid.bot.util.RaidAtomModelWrapper;
 
 import java.net.URI;
@@ -40,7 +40,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         RaidBotContextWrapper botContextWrapper = (RaidBotContextWrapper) ctx.getBotContextWrapper();
         CreateRaidAtomEvent createRaidAtomEvent = (CreateRaidAtomEvent) event;
 
-        final Raid raidToCreate = createRaidAtomEvent.getRaid();
+        final ContextRaid raidToCreate = createRaidAtomEvent.getContextRaid();
 
         if (botContextWrapper.getAtomUriForRaid(raidToCreate) != null) {
             logger.warn("RaidAtom already exists, URI: " + botContextWrapper.getAtomUriForRaid(raidToCreate));
@@ -69,8 +69,8 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
                 String textMessage = WonRdfUtils.MessageUtils
                         .getTextMessage(((FailureResponseEvent) event).getFailureMessage());
                 logger.error("atom creation failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
-                EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
                 botContextWrapper.removeRaid(raidToCreate);
+                EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
             }
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(createAtomMessage, successCallback, failureCallback, ctx);

@@ -12,7 +12,7 @@ import won.protocol.vocabulary.WONCON;
 import won.protocol.vocabulary.WONMATCH;
 import won.protocol.vocabulary.WXGROUP;
 import won.spoco.core.protocol.vocabulary.WXPOGO;
-import won.spoco.raid.bot.api.model.Raid;
+import won.spoco.raid.bot.impl.model.ContextRaid;
 
 import java.math.RoundingMode;
 import java.net.URI;
@@ -21,11 +21,11 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
-    public RaidAtomModelWrapper(String atomUri, Raid raid) {
-        this(URI.create(atomUri), raid);
+    public RaidAtomModelWrapper(String atomUri, ContextRaid contextRaid) {
+        this(URI.create(atomUri), contextRaid);
     }
 
-    public RaidAtomModelWrapper(URI atomUri, Raid raid) {
+    public RaidAtomModelWrapper(URI atomUri, ContextRaid contextRaid) {
         super(atomUri);
 
         Resource atom = this.getAtomModel().createResource(atomUri.toString());
@@ -41,29 +41,29 @@ public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
 
         //Raid Information
         Resource raidResource = atom.getModel().createResource();
-        if(raid.getHatchDate() != null) {
-            raidResource.addProperty(SCHEMA.VALID_FROM, DateTimeUtils.toLiteral(raid.getHatchDate(), atom.getModel()));
+        if(contextRaid.getHatchDate() != null) {
+            raidResource.addProperty(SCHEMA.VALID_FROM, DateTimeUtils.toLiteral(contextRaid.getHatchDate(), atom.getModel()));
         }
-        raidResource.addProperty(SCHEMA.VALID_THROUGH, DateTimeUtils.toLiteral(raid.getEndDate(), atom.getModel()));
+        raidResource.addProperty(SCHEMA.VALID_THROUGH, DateTimeUtils.toLiteral(contextRaid.getEndDate(), atom.getModel()));
 
-        if(raid.getLevel() > 0) {
-            raidResource.addLiteral(WXPOGO.level, raid.getLevel());
+        if(contextRaid.getLevel() > 0) {
+            raidResource.addLiteral(WXPOGO.level, contextRaid.getLevel());
         }
-        if(raid.getPokedexId() > 0) {
-            raidResource.addLiteral(WXPOGO.pokemonId, raid.getPokedexId());
+        if(contextRaid.getPokedexId() > 0) {
+            raidResource.addLiteral(WXPOGO.pokemonId, contextRaid.getPokedexId());
         }
-        if(raid.getPokemonForm() != null) {
-            raidResource.addLiteral(WXPOGO.pokemonForm, raid.getPokemonForm());
+        if(contextRaid.getPokemonForm() != null) {
+            raidResource.addLiteral(WXPOGO.pokemonForm, contextRaid.getPokemonForm());
         }
         atom.addProperty(WXPOGO.raid, raidResource);
 
         //Gym Information
-        if(raid.getGymInfo() != null) {
-            atom.addProperty(SCHEMA.DESCRIPTION, raid.getGymInfo());
-            atom.addProperty(DC.description, raid.getGymInfo());
+        if(contextRaid.getGymInfo() != null) {
+            atom.addProperty(SCHEMA.DESCRIPTION, contextRaid.getGymInfo());
+            atom.addProperty(DC.description, contextRaid.getGymInfo());
         }
 
-        if(raid.isGymEx()) {
+        if(contextRaid.isGymEx()) {
             atom.addLiteral(WXPOGO.gymEx, true);
         }
 
@@ -74,13 +74,13 @@ public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
         DecimalFormat df = new DecimalFormat("##.######");
         df.setRoundingMode(RoundingMode.HALF_UP);
         df.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
-        String nwlat = df.format(raid.getGymLat());
-        String nwlng = df.format(raid.getGymLng());
-        String selat = df.format(raid.getGymLat());
-        String selng = df.format(raid.getGymLng());
-        String lat = df.format(raid.getGymLat());
-        String lng = df.format(raid.getGymLng());
-        String name = raid.getGymName();
+        String nwlat = df.format(contextRaid.getGymLat());
+        String nwlng = df.format(contextRaid.getGymLng());
+        String selat = df.format(contextRaid.getGymLat());
+        String selng = df.format(contextRaid.getGymLng());
+        String lat = df.format(contextRaid.getGymLat());
+        String lng = df.format(contextRaid.getGymLng());
+        String name = contextRaid.getGymName();
         Resource boundingBoxResource = atom.getModel().createResource();
         Resource nwCornerResource = atom.getModel().createResource();
         Resource seCornerResource = atom.getModel().createResource();

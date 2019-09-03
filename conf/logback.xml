@@ -24,7 +24,7 @@
         </encoder>
     </appender>
 
-    <logger name="won.spoco.bot" level="DEBUG"/>
+    <logger name="won.spoco" level="DEBUG"/>
 
     <logger name="won.bot" level="DEBUG"/>
     <logger name="won.bot.framework.bot" level="DEBUG"/>

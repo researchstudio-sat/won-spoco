@@ -13,9 +13,9 @@ import won.bot.framework.eventbot.listener.EventListener;
 import won.protocol.message.WonMessage;
 import won.protocol.util.RdfUtils;
 import won.protocol.util.WonRdfUtils;
-import won.spoco.raid.bot.api.model.Raid;
 import won.spoco.raid.bot.event.ModifyRaidAtomEvent;
 import won.spoco.raid.bot.impl.RaidBotContextWrapper;
+import won.spoco.raid.bot.impl.model.ContextRaid;
 import won.spoco.raid.bot.util.RaidAtomModelWrapper;
 
 import java.net.URI;
@@ -37,7 +37,7 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
         RaidBotContextWrapper botContextWrapper = (RaidBotContextWrapper) ctx.getBotContextWrapper();
         ModifyRaidAtomEvent modifyRaidAtomEvent = (ModifyRaidAtomEvent) event;
 
-        final Raid modifiedRaid = modifyRaidAtomEvent.getRaid();
+        final ContextRaid modifiedRaid = modifyRaidAtomEvent.getContextRaid();
 
         if (botContextWrapper.getAtomUriForRaid(modifiedRaid) == null) {
             logger.warn("RaidAtom does not exist in the botContext(must have been deleted) no modification possible: " + modifiedRaid);
