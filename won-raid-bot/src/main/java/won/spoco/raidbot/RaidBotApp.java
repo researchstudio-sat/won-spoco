@@ -1,4 +1,4 @@
-package won.spoco.raid.bot.app;
+package won.spoco.raidbot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;

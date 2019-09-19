@@ -1,4 +1,4 @@
-package won.spoco.raid.bot.action;
+package won.spoco.raidbot.action;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.Dataset;
@@ -13,10 +13,10 @@ import won.bot.framework.eventbot.listener.EventListener;
 import won.protocol.message.WonMessage;
 import won.protocol.util.RdfUtils;
 import won.protocol.util.WonRdfUtils;
-import won.spoco.raid.bot.event.ModifyRaidAtomEvent;
-import won.spoco.raid.bot.impl.RaidBotContextWrapper;
-import won.spoco.raid.bot.impl.model.ContextRaid;
-import won.spoco.raid.bot.util.RaidAtomModelWrapper;
+import won.spoco.raidbot.context.RaidBotContextWrapper;
+import won.spoco.raidbot.event.ModifyRaidAtomEvent;
+import won.spoco.raidbot.impl.model.ContextRaid;
+import won.spoco.raidbot.util.RaidAtomModelWrapper;
 
 import java.net.URI;
 

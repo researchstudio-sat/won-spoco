@@ -1,10 +1,10 @@
-package won.spoco.raid.bot.impl;
+package won.spoco.raidbot.context;
 
 import won.bot.framework.bot.context.BotContext;
 import won.bot.framework.bot.context.BotContextWrapper;
-import won.spoco.raid.bot.api.RaidFetcher;
-import won.spoco.raid.bot.api.model.Raid;
-import won.spoco.raid.bot.impl.model.ContextRaid;
+import won.spoco.raidbot.api.RaidFetcher;
+import won.spoco.raidbot.api.model.Raid;
+import won.spoco.raidbot.impl.model.ContextRaid;
 
 import java.net.URI;
 import java.util.Collection;
@@ -15,12 +15,14 @@ import java.util.Map;
 public class RaidBotContextWrapper extends BotContextWrapper {
     private final List<RaidFetcher> raidFetcherList;
 
-    private final String raidIdToRaidMap = getBotName() + ":raidIdToRaidMap";
-    private final String raidIdToAtomUriMap = getBotName() + ":raidIdToAtomUriMap";
+    private final String raidIdToRaidMap;
+    private final String raidIdToAtomUriMap;
 
     public RaidBotContextWrapper(BotContext botContext, String botName, List<RaidFetcher> raidFetcherList) {
         super(botContext, botName);
         this.raidFetcherList = raidFetcherList;
+        this.raidIdToRaidMap = botName + ":raidIdToRaidMap";
+        this.raidIdToAtomUriMap = botName + "raidIdToAtomUriMap";
     }
 
     public List<RaidFetcher> getRaidFetcherList() {

@@ -1,4 +1,4 @@
-package won.spoco.raid.bot.action;
+package won.spoco.raidbot.action;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,9 @@ import won.bot.framework.eventbot.event.impl.wonmessage.FailureResponseEvent;
 import won.bot.framework.eventbot.listener.EventListener;
 import won.protocol.message.WonMessage;
 import won.protocol.util.WonRdfUtils;
-import won.spoco.raid.bot.event.DeleteRaidAtomEvent;
-import won.spoco.raid.bot.impl.RaidBotContextWrapper;
-import won.spoco.raid.bot.impl.model.ContextRaid;
+import won.spoco.raidbot.context.RaidBotContextWrapper;
+import won.spoco.raidbot.event.DeleteRaidAtomEvent;
+import won.spoco.raidbot.impl.model.ContextRaid;
 
 import java.net.URI;
 

@@ -10,7 +10,7 @@ ENV WON_CONFIG_DIR=/usr/src/conf
 ENV LOGBACK_CONFIG=logback.xml
 
 # add the default monitoring output directory
-ENV RAID_BOT=won.spoco.raid.bot.app.RaidBotApp
+ENV RAID_BOT=RaidBotApp
 
 # add the jar and the conf directory
 ADD ./raid-bot.jar /usr/src/

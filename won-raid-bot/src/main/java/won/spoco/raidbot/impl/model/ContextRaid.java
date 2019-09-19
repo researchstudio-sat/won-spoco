@@ -1,6 +1,6 @@
-package won.spoco.raid.bot.impl.model;
+package won.spoco.raidbot.impl.model;
 
-import won.spoco.raid.bot.api.model.Raid;
+import won.spoco.raidbot.api.model.Raid;
 
 import java.io.Serializable;
 import java.util.Date;

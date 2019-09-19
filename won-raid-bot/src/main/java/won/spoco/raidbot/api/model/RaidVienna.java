@@ -1,4 +1,4 @@
-package won.spoco.raid.bot.api.model;
+package won.spoco.raidbot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;

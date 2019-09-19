@@ -1,12 +1,15 @@
-package won.spoco.raid.bot.api;
+package won.spoco.raidbot.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import won.spoco.raid.bot.api.model.RaidLinz;
+import won.spoco.raidbot.api.model.RaidLinz;
 
 import java.util.Collections;
 import java.util.List;

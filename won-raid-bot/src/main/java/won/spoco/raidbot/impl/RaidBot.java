@@ -1,4 +1,4 @@
-package won.spoco.raid.bot.impl;
+package won.spoco.raidbot.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +22,16 @@ import won.bot.framework.eventbot.listener.EventListener;
 import won.bot.framework.eventbot.listener.impl.ActionOnEventListener;
 import won.bot.framework.eventbot.listener.impl.ActionOnFirstEventListener;
 import won.protocol.model.Connection;
-import won.spoco.raid.bot.action.CreateRaidAtomAction;
-import won.spoco.raid.bot.action.DeleteRaidAtomAction;
-import won.spoco.raid.bot.action.ModifyRaidAtomAction;
-import won.spoco.raid.bot.api.RaidFetcher;
-import won.spoco.raid.bot.api.model.Raid;
-import won.spoco.raid.bot.event.CreateRaidAtomEvent;
-import won.spoco.raid.bot.event.DeleteRaidAtomEvent;
-import won.spoco.raid.bot.event.ModifyRaidAtomEvent;
-import won.spoco.raid.bot.impl.model.ContextRaid;
+import won.spoco.raidbot.action.CreateRaidAtomAction;
+import won.spoco.raidbot.action.DeleteRaidAtomAction;
+import won.spoco.raidbot.action.ModifyRaidAtomAction;
+import won.spoco.raidbot.api.RaidFetcher;
+import won.spoco.raidbot.api.model.Raid;
+import won.spoco.raidbot.context.RaidBotContextWrapper;
+import won.spoco.raidbot.event.CreateRaidAtomEvent;
+import won.spoco.raidbot.event.DeleteRaidAtomEvent;
+import won.spoco.raidbot.event.ModifyRaidAtomEvent;
+import won.spoco.raidbot.impl.model.ContextRaid;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -71,7 +72,7 @@ public class RaidBot extends EventBot {
                         @Override
                         protected void doRun(Event event, EventListener executingListener) {
                             List<RaidFetcher> raidFetcherList = botContextWrapper.getRaidFetcherList();
-                            for(RaidFetcher rf : raidFetcherList) {
+                            for (RaidFetcher rf : raidFetcherList) {
                                 logger.debug("Fetching Raids: Fetcher - {}", rf.toString());
                                 List<Raid> activeRaids = rf.getActiveRaids();
 

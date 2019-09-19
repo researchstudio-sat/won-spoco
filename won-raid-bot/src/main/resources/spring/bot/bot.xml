@@ -19,15 +19,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath*:spring/component/nodeurisource/nodeurisource-random.xml"/>
-    <import resource="classpath*:spring/component/botContext/botContext.xml"/>
     <import resource="classpath:/spring/component/atomproducer/atomproducer-mixed.xml"/>
 
-    <bean id="raidBot" class="won.spoco.raid.bot.impl.RaidBot">
-        <!-- optional property, by default one echo need per each need will be created -->
-
+    <bean id="raidBot" class="won.spoco.raidbot.impl.RaidBot">
         <property name="botContextWrapper" ref="botContextWrapper" />
         <property name="taskScheduler" ref="taskScheduler" />
+
+        <property name="atomProducer">
+            <!-- since this bot does not create any atoms from other source, e.g rdf-files, mails etc, adding the NopAtomProducer will suffice, as it is never used -->
+            <bean class="won.bot.framework.component.atomproducer.impl.NopAtomProducer"/>
+        </property>
+        <!--property name="nodeURISource" ref="nodeUriSourceRandom" /-->
         <property name="trigger">
             <bean class="org.springframework.scheduling.support.PeriodicTrigger">
                 <constructor-arg name="period" value="60000" />
@@ -38,24 +40,23 @@
         </property>
     </bean>
 
-    <bean id="botContextWrapper" class="won.spoco.raid.bot.impl.RaidBotContextWrapper">
+    <bean id="botContextWrapper" class="won.spoco.raidbot.context.RaidBotContextWrapper">
         <constructor-arg name="botContext" ref="${botContext.impl}"/>
-        <constructor-arg name="botName" value="${raidbot.name}"/>
+        <constructor-arg name="botName" value="${bot.name}"/>
         <constructor-arg name="raidFetcherList">
             <list>
-                <ref bean="raidFetcherVienna"/>
-                <ref bean="raidFetcherLinz" />
+                <bean id="raidFetcherLinz" class="won.spoco.raidbot.api.RaidFetcherLinzImpl">
+                    <constructor-arg name="endpoint" value="${api.linz.endpoint}"/>
+                    <constructor-arg name="token" value="${api.linz.token}"/>
+                </bean>
+                <bean id="raidFetcherVienna" class="won.spoco.raidbot.api.RaidFetcherViennaImpl">
+                    <constructor-arg name="endpoint" value="${api.vienna.endpoint}"/>
+                    <constructor-arg name="username" value="${api.vienna.username}"/>
+                    <constructor-arg name="request" value="${api.vienna.request}"/>
+                </bean>
             </list>
         </constructor-arg>
     </bean>
 
-    <bean id="raidFetcherLinz" class="won.spoco.raid.bot.api.RaidFetcherLinzImpl">
-        <constructor-arg name="endpoint" value="${api.linz.endpoint}"/>
-        <constructor-arg name="token" value="${api.linz.token}"/>
-    </bean>
-    <bean id="raidFetcherVienna" class="won.spoco.raid.bot.api.RaidFetcherViennaImpl">
-        <constructor-arg name="endpoint" value="${api.vienna.endpoint}"/>
-        <constructor-arg name="username" value="${api.vienna.username}"/>
-        <constructor-arg name="request" value="${api.vienna.request}"/>
-    </bean>
+
 </beans>

@@ -1,4 +1,4 @@
-package won.spoco.raid.bot.util;
+package won.spoco.raidbot.util;
 
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.RDFDatatype;
@@ -12,7 +12,7 @@ import won.protocol.vocabulary.WONCON;
 import won.protocol.vocabulary.WONMATCH;
 import won.protocol.vocabulary.WXGROUP;
 import won.spoco.core.protocol.vocabulary.WXPOGO;
-import won.spoco.raid.bot.impl.model.ContextRaid;
+import won.spoco.raidbot.impl.model.ContextRaid;
 
 import java.math.RoundingMode;
 import java.net.URI;
