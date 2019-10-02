@@ -1,14 +1,23 @@
 package won.spoco.raidbot;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
+import won.bot.framework.bot.utils.BotUtils;
 
+@SpringBootConfiguration
+@PropertySource("classpath:application.properties")
+@ImportResource("classpath:/spring/app/botApp.xml")
 public class RaidBotApp {
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(
-                "classpath:/spring/app/raidBotApp.xml");
+        if (!BotUtils.isValidRunConfig()) {
+            System.exit(1);
+        }
+        SpringApplication app = new SpringApplication(RaidBotApp.class);
         app.setWebEnvironment(false);
-        ConfigurableApplicationContext applicationContext =  app.run(args);
+        app.run(args);
+        //ConfigurableApplicationContext applicationContext =  app.run(args);
         //Thread.sleep(5*60*1000);
         //app.exit(applicationContext);
     }

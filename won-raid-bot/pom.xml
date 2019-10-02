@@ -17,17 +17,26 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
                 <executions>
                     <execution>
-                        <id>build-raid-bot-uberjar</id>
+                        <id>build-bot-uberjar</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>raid-bot</finalName>
+                            <finalName>bot</finalName>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <artifactSet>
                                 <includes>
@@ -49,15 +58,17 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>reference.conf</resource>
                                 </transformer>
-                                <!--transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>won.matcher.service.AkkaSystemMain</mainClass>
-                                </transformer-->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>won.spoco.raidbot.RaidBotApp</mainClass>
+                                </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/spring.handlers</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.factories</resource>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -95,12 +106,7 @@
         <dependency>
             <groupId>at.researchstudio.sat</groupId>
             <artifactId>won-bot</artifactId>
-            <version>0.5-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>at.researchstudio.sat</groupId>
-            <artifactId>won-utils-goals</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <version>0.5</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

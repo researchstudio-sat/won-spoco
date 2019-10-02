@@ -24,17 +24,22 @@
             <dependency>
                 <groupId>at.researchstudio.sat</groupId>
                 <artifactId>won-bot</artifactId>
-                <version>0.4-SNAPSHOT</version>
+                <version>0.5</version>
             </dependency>
             <dependency>
                 <groupId>at.researchstudio.sat</groupId>
                 <artifactId>won-utils-goals</artifactId>
-                <version>0.4-SNAPSHOT</version>
+                <version>0.5</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot</artifactId>
-                <version>1.5.17.RELEASE</version>
+                <version>1.5.21.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>1.5.21.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -58,6 +63,7 @@
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
+                        <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
             </plugins>
