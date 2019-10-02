@@ -44,12 +44,11 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
             botContextWrapper.removeRaid(modifiedRaid);
             return;
         }
-
-        final URI wonNodeUri = ctx.getNodeURISource().getNodeURI();
+        final URI wonNodeUri = ctx.getNodeURISource().getNodeURI(); //FIXME: MIGHT TAKE THE WRONG NODEURI
         final URI atomURI = botContextWrapper.getAtomUriForRaid(modifiedRaid);
         Dataset dataset = new RaidAtomModelWrapper(atomURI, modifiedRaid).copyDataset();
         logger.debug("modify atom on won node {} with content {} ", wonNodeUri, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
-        WonMessage modifyAtomMessage = buildWonMessage(atomURI, dataset);
+        WonMessage modifyAtomMessage = buildWonMessage(atomURI, dataset); //FIXME: MIGHT TAKE THE WRONG NODEURI
 
         EventListener successCallback = new EventListener() {
             @Override

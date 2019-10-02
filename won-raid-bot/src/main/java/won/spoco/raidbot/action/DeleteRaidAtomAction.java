@@ -41,10 +41,10 @@ public class DeleteRaidAtomAction extends AbstractDeleteAtomAction {
             return;
         }
 
-        final URI wonNodeUri = ctx.getNodeURISource().getNodeURI();
+        final URI wonNodeUri = ctx.getNodeURISource().getNodeURI(); //FIXME: MIGHT TAKE THE WRONG NODEURI
         final URI atomURI = botContextWrapper.getAtomUriForRaid(raidToDelete);
         logger.debug("deleting atom on won node {} with uri {} ", wonNodeUri, atomURI);
-        WonMessage deleteAtomMessage = buildWonMessage(atomURI);
+        WonMessage deleteAtomMessage = buildWonMessage(atomURI); //FIXME: MIGHT TAKE THE WRONG NODEURI
 
         EventListener successCallback = new EventListener() {
             @Override
