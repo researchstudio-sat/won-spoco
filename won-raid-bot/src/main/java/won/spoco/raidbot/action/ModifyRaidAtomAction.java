@@ -44,11 +44,10 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
             botContextWrapper.removeRaid(modifiedRaid);
             return;
         }
-        final URI wonNodeUri = ctx.getNodeURISource().getNodeURI(); //FIXME: MIGHT TAKE THE WRONG NODEURI
         final URI atomURI = botContextWrapper.getAtomUriForRaid(modifiedRaid);
         Dataset dataset = new RaidAtomModelWrapper(atomURI, modifiedRaid).copyDataset();
-        logger.debug("modify atom on won node {} with content {} ", wonNodeUri, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
-        WonMessage modifyAtomMessage = buildWonMessage(atomURI, dataset); //FIXME: MIGHT TAKE THE WRONG NODEURI
+        logger.debug("modify atom {} with content {} ", atomURI, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
+        WonMessage modifyAtomMessage = buildWonMessage(atomURI, dataset);
 
         EventListener successCallback = new EventListener() {
             @Override
@@ -62,7 +61,7 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
             public void onEvent(Event event) {
                 String textMessage = WonRdfUtils.MessageUtils
                         .getTextMessage(((FailureResponseEvent) event).getFailureMessage());
-                logger.error("atom modificaiton failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
+                logger.error("atom modification failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
             }
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(modifyAtomMessage, successCallback, failureCallback, ctx);
