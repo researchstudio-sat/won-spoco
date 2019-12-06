@@ -47,7 +47,7 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
         final URI atomURI = botContextWrapper.getAtomUriForRaid(modifiedRaid);
         Dataset dataset = new RaidAtomModelWrapper(atomURI, modifiedRaid).copyDataset();
         logger.debug("modify atom {} with content {} ", atomURI, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
-        WonMessage modifyAtomMessage = buildWonMessage(atomURI, dataset);
+        WonMessage modifyAtomMessage = ctx.getWonMessageSender().prepareMessage(buildWonMessage(atomURI, dataset));
 
         EventListener successCallback = new EventListener() {
             @Override
@@ -66,7 +66,7 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(modifyAtomMessage, successCallback, failureCallback, ctx);
         logger.debug("registered listeners for response to message URI {}", modifyAtomMessage.getMessageURI());
-        ctx.getWonMessageSender().sendWonMessage(modifyAtomMessage);
+        ctx.getWonMessageSender().sendMessage(modifyAtomMessage);
         logger.debug("atom modify message sent with message URI {}", modifyAtomMessage.getMessageURI());
     }
 }

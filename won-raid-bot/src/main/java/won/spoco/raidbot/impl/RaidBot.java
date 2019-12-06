@@ -14,8 +14,8 @@ import won.bot.framework.eventbot.behaviour.BotBehaviour;
 import won.bot.framework.eventbot.behaviour.ExecuteWonMessageCommandBehaviour;
 import won.bot.framework.eventbot.bus.EventBus;
 import won.bot.framework.eventbot.event.Event;
-import won.bot.framework.eventbot.event.impl.command.open.OpenCommandEvent;
-import won.bot.framework.eventbot.event.impl.command.open.OpenCommandResultEvent;
+import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandEvent;
+import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandResultEvent;
 import won.bot.framework.eventbot.event.impl.wonmessage.ConnectFromOtherAtomEvent;
 import won.bot.framework.eventbot.filter.impl.CommandResultFilter;
 import won.bot.framework.eventbot.listener.EventListener;
@@ -142,21 +142,22 @@ public class RaidBot extends EventBot {
                     throw new IllegalStateException(ctx.getBotContextWrapper().getBotName() + ": ConnectFromOtherAtomEvent does not work without a RaidBotContextWrapper and ConnectFromOtherAtomEvent");
                 }
 
+                ConnectFromOtherAtomEvent connectFromOtherAtomEvent = (ConnectFromOtherAtomEvent) event;
                 Connection con = ((ConnectFromOtherAtomEvent) event).getCon();
                 try {
                     String message = "Welcome to the Raid GroupChat!";
-                    final OpenCommandEvent openCommandEvent = new OpenCommandEvent(con, message);
-                    ctx.getEventBus().subscribe(OpenCommandResultEvent.class, new ActionOnFirstEventListener(ctx,
-                            new CommandResultFilter(openCommandEvent), new BaseEventBotAction(ctx) {
+                    final ConnectCommandEvent connectCommandEvent = new ConnectCommandEvent(connectFromOtherAtomEvent.getRecipientSocket(), connectFromOtherAtomEvent.getSenderSocket(), message);
+                    ctx.getEventBus().subscribe(ConnectCommandEvent.class, new ActionOnFirstEventListener(ctx,
+                            new CommandResultFilter(connectCommandEvent), new BaseEventBotAction(ctx) {
                         @Override
                         protected void doRun(Event event, EventListener executingListener) {
-                            OpenCommandResultEvent connectionMessageCommandResultEvent = (OpenCommandResultEvent) event;
+                            ConnectCommandResultEvent connectionMessageCommandResultEvent = (ConnectCommandResultEvent) event;
                             if (!connectionMessageCommandResultEvent.isSuccess()) {
                                 logger.error("Failure when trying to open a received Request: " + connectionMessageCommandResultEvent.getMessage());
                             }
                         }
                     }));
-                    ctx.getEventBus().publish(openCommandEvent);
+                    ctx.getEventBus().publish(connectCommandEvent);
                 } catch (Exception te) {
                     logger.error(te.getMessage(), te);
                 }

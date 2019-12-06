@@ -44,7 +44,7 @@ public class DeleteRaidAtomAction extends AbstractDeleteAtomAction {
         final URI wonNodeUri = ctx.getNodeURISource().getNodeURI(); //FIXME: MIGHT TAKE THE WRONG NODEURI
         final URI atomURI = botContextWrapper.getAtomUriForRaid(raidToDelete);
         logger.debug("deleting atom on won node {} with uri {} ", wonNodeUri, atomURI);
-        WonMessage deleteAtomMessage = buildWonMessage(atomURI); //FIXME: MIGHT TAKE THE WRONG NODEURI
+        WonMessage deleteAtomMessage = ctx.getWonMessageSender().prepareMessage(buildWonMessage(atomURI)); //FIXME: MIGHT TAKE THE WRONG NODEURI
 
         EventListener successCallback = new EventListener() {
             @Override
@@ -64,7 +64,7 @@ public class DeleteRaidAtomAction extends AbstractDeleteAtomAction {
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(deleteAtomMessage, successCallback, failureCallback, ctx);
         logger.debug("registered listeners for response to message URI {}", deleteAtomMessage.getMessageURI());
-        ctx.getWonMessageSender().sendWonMessage(deleteAtomMessage);
+        ctx.getWonMessageSender().sendMessage(deleteAtomMessage);
         logger.debug("atom deletion message sent with message URI {}", deleteAtomMessage.getMessageURI());
     }
 }

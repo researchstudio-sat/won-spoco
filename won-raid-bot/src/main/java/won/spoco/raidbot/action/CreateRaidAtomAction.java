@@ -52,7 +52,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         final URI atomURI = wonNodeInformationService.generateAtomURI(wonNodeUri);
         Dataset dataset = new RaidAtomModelWrapper(atomURI, raidToCreate).copyDataset();
         logger.debug("creating atom on won node {} with content {} ", wonNodeUri, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
-        WonMessage createAtomMessage = createWonMessage(atomURI, dataset);
+        WonMessage createAtomMessage = ctx.getWonMessageSender().prepareMessage(createWonMessage(atomURI, dataset));
         EventBotActionUtils.rememberInList(ctx, atomURI, uriListName);
         EventBus bus = ctx.getEventBus();
         EventListener successCallback = new EventListener() {
@@ -75,7 +75,7 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(createAtomMessage, successCallback, failureCallback, ctx);
         logger.debug("registered listeners for response to message URI {}", createAtomMessage.getMessageURI());
-        ctx.getWonMessageSender().sendWonMessage(createAtomMessage);
+        ctx.getWonMessageSender().sendMessage(createAtomMessage);
         logger.debug("atom creation message sent with message URI {}", createAtomMessage.getMessageURI());
     }
 }
