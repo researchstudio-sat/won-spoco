@@ -12,6 +12,7 @@ import won.bot.framework.eventbot.event.Event;
 import won.bot.framework.eventbot.event.impl.atomlifecycle.AtomCreatedEvent;
 import won.bot.framework.eventbot.event.impl.wonmessage.FailureResponseEvent;
 import won.bot.framework.eventbot.listener.EventListener;
+import won.bot.framework.extensions.serviceatom.ServiceAtomContext;
 import won.protocol.message.WonMessage;
 import won.protocol.service.WonNodeInformationService;
 import won.protocol.util.RdfUtils;
@@ -35,10 +36,15 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         EventListenerContext ctx = getEventListenerContext();
         if (!(ctx.getBotContextWrapper() instanceof RaidBotContextWrapper) || !(event instanceof CreateRaidAtomEvent)) {
             logger.error("CreateRaidAtomAction does not work without a RaidBotContextWrapper and CreateRaidAtomEvent");
-            throw new IllegalStateException("CreateRaidAtomAction does not work without a RaidBotContextWrapper and CreateRaidAtomEvent");
+            throw new IllegalStateException(
+                    "CreateRaidAtomAction does not work without a RaidBotContextWrapper and CreateRaidAtomEvent");
         }
         RaidBotContextWrapper botContextWrapper = (RaidBotContextWrapper) ctx.getBotContextWrapper();
         CreateRaidAtomEvent createRaidAtomEvent = (CreateRaidAtomEvent) event;
+
+        // Get URI of service atom, to set as holder of created atom
+        ServiceAtomContext serviceAtomContext = (ServiceAtomContext) ctx.getBotContextWrapper();
+        final URI serviceAtomURI = serviceAtomContext.getServiceAtomUri();
 
         final ContextRaid raidToCreate = createRaidAtomEvent.getContextRaid();
 
@@ -51,7 +57,8 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         WonNodeInformationService wonNodeInformationService = ctx.getWonNodeInformationService();
         final URI atomURI = wonNodeInformationService.generateAtomURI(wonNodeUri);
         Dataset dataset = new RaidAtomModelWrapper(atomURI, raidToCreate).copyDataset();
-        logger.debug("creating atom on won node {} with content {} ", wonNodeUri, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
+        logger.debug("creating atom on won node {} with content {} ", wonNodeUri,
+                StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
         WonMessage createAtomMessage = ctx.getWonMessageSender().prepareMessage(createWonMessage(atomURI, dataset));
         EventBotActionUtils.rememberInList(ctx, atomURI, uriListName);
         EventBus bus = ctx.getEventBus();
@@ -68,7 +75,8 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
             public void onEvent(Event event) {
                 String textMessage = WonRdfUtils.MessageUtils
                         .getTextMessage(((FailureResponseEvent) event).getFailureMessage());
-                logger.error("atom creation failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
+                logger.error("atom creation failed for atom URI {}, original message URI {}: {}", atomURI,
+                        ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
                 botContextWrapper.removeRaid(raidToCreate);
                 EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
             }

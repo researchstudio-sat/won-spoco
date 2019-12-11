@@ -11,6 +11,7 @@ import won.protocol.vocabulary.SCHEMA;
 import won.protocol.vocabulary.WONCON;
 import won.protocol.vocabulary.WONMATCH;
 import won.protocol.vocabulary.WXGROUP;
+import won.protocol.vocabulary.WXHOLD;
 import won.spoco.core.protocol.vocabulary.WXPOGO;
 import won.spoco.raidbot.impl.model.ContextRaid;
 
@@ -30,7 +31,7 @@ public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
 
         Resource atom = this.getAtomModel().createResource(atomUri.toString());
 
-        //Default Data & Information
+        // Default Data & Information
         atom.addProperty(RDF.type, SCHEMA.PLANACTION);
 
         Resource object = atom.getModel().createResource();
@@ -38,32 +39,33 @@ public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
         object.addProperty(SCHEMA.ABOUT, WXPOGO.PokemonGo);
         atom.addProperty(SCHEMA.OBJECT, object);
 
-
-        //Raid Information
+        // Raid Information
         Resource raidResource = atom.getModel().createResource();
-        if(contextRaid.getHatchDate() != null) {
-            raidResource.addProperty(SCHEMA.VALID_FROM, DateTimeUtils.toLiteral(contextRaid.getHatchDate(), atom.getModel()));
+        if (contextRaid.getHatchDate() != null) {
+            raidResource.addProperty(SCHEMA.VALID_FROM,
+                    DateTimeUtils.toLiteral(contextRaid.getHatchDate(), atom.getModel()));
         }
-        raidResource.addProperty(SCHEMA.VALID_THROUGH, DateTimeUtils.toLiteral(contextRaid.getEndDate(), atom.getModel()));
+        raidResource.addProperty(SCHEMA.VALID_THROUGH,
+                DateTimeUtils.toLiteral(contextRaid.getEndDate(), atom.getModel()));
 
-        if(contextRaid.getLevel() > 0) {
+        if (contextRaid.getLevel() > 0) {
             raidResource.addLiteral(WXPOGO.level, contextRaid.getLevel());
         }
-        if(contextRaid.getPokedexId() > 0) {
+        if (contextRaid.getPokedexId() > 0) {
             raidResource.addLiteral(WXPOGO.pokemonId, contextRaid.getPokedexId());
         }
-        if(contextRaid.getPokemonForm() != null) {
+        if (contextRaid.getPokemonForm() != null) {
             raidResource.addLiteral(WXPOGO.pokemonForm, contextRaid.getPokemonForm());
         }
         atom.addProperty(WXPOGO.raid, raidResource);
 
-        //Gym Information
-        if(contextRaid.getGymInfo() != null) {
+        // Gym Information
+        if (contextRaid.getGymInfo() != null) {
             atom.addProperty(SCHEMA.DESCRIPTION, contextRaid.getGymInfo());
             atom.addProperty(DC.description, contextRaid.getGymInfo());
         }
 
-        if(contextRaid.isGymEx()) {
+        if (contextRaid.isGymEx()) {
             atom.addLiteral(WXPOGO.gymEx, true);
         }
 
@@ -90,7 +92,8 @@ public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
         geoResource.addProperty(RDF.type, SCHEMA.GEOCOORDINATES);
         geoResource.addProperty(SCHEMA.LATITUDE, lat);
         geoResource.addProperty(SCHEMA.LONGITUDE, lng);
-        RDFDatatype bigdata_geoSpatialDatatype = new BaseDatatype("http://www.bigdata.com/rdf/geospatial/literals/v1#lat-lon");
+        RDFDatatype bigdata_geoSpatialDatatype = new BaseDatatype(
+                "http://www.bigdata.com/rdf/geospatial/literals/v1#lat-lon");
         geoResource.addProperty(WONCON.geoSpatial, lat + "#" + lng, bigdata_geoSpatialDatatype);
         raidLocation.addProperty(WONCON.boundingBox, boundingBoxResource);
         boundingBoxResource.addProperty(WONCON.northWestCorner, nwCornerResource);
@@ -104,6 +107,7 @@ public class RaidAtomModelWrapper extends DefaultAtomModelWrapper {
 
         atom.addProperty(SCHEMA.LOCATION, raidLocation);
 
+        this.addSocket("#HoldableSocket", WXHOLD.HoldableSocketString);
         this.addSocket("#GroupSocket", WXGROUP.GroupSocketString);
         this.setDefaultSocket("#GroupSocket");
         this.addFlag(WONMATCH.NoHintForMe);

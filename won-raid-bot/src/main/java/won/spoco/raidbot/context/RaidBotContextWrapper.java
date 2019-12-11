@@ -2,6 +2,8 @@ package won.spoco.raidbot.context;
 
 import won.bot.framework.bot.context.BotContext;
 import won.bot.framework.bot.context.BotContextWrapper;
+import won.bot.framework.extensions.serviceatom.ServiceAtomContext;
+import won.bot.framework.extensions.serviceatom.ServiceAtomEnabledBotContextWrapper;
 import won.spoco.raidbot.api.RaidFetcher;
 import won.spoco.raidbot.api.model.Raid;
 import won.spoco.raidbot.impl.model.ContextRaid;
@@ -12,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RaidBotContextWrapper extends BotContextWrapper {
+public class RaidBotContextWrapper extends ServiceAtomEnabledBotContextWrapper implements ServiceAtomContext {
     private final List<RaidFetcher> raidFetcherList;
 
     private final String raidIdToRaidMap;
