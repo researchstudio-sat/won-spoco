@@ -42,10 +42,6 @@ public class CreateRaidAtomAction extends AbstractCreateAtomAction {
         RaidBotContextWrapper botContextWrapper = (RaidBotContextWrapper) ctx.getBotContextWrapper();
         CreateRaidAtomEvent createRaidAtomEvent = (CreateRaidAtomEvent) event;
 
-        // Get URI of service atom, to set as holder of created atom
-        ServiceAtomContext serviceAtomContext = (ServiceAtomContext) ctx.getBotContextWrapper();
-        final URI serviceAtomURI = serviceAtomContext.getServiceAtomUri();
-
         final ContextRaid raidToCreate = createRaidAtomEvent.getContextRaid();
 
         if (botContextWrapper.getAtomUriForRaid(raidToCreate) != null) {
