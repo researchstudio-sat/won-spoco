@@ -1,8 +1,13 @@
 package won.spoco.raidbot.impl;
 
+import java.time.Duration;
+import java.util.Collection;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+
 import won.bot.framework.bot.base.EventBot;
 import won.bot.framework.eventbot.EventListenerContext;
 import won.bot.framework.eventbot.action.BaseEventBotAction;
@@ -17,11 +22,9 @@ import won.bot.framework.eventbot.event.Event;
 import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandEvent;
 import won.bot.framework.eventbot.event.impl.command.connect.ConnectCommandResultEvent;
 import won.bot.framework.eventbot.event.impl.wonmessage.ConnectFromOtherAtomEvent;
-import won.bot.framework.eventbot.filter.impl.AtomUriInNamedListFilter;
 import won.bot.framework.eventbot.filter.impl.CommandResultFilter;
 import won.bot.framework.eventbot.filter.impl.NotFilter;
 import won.bot.framework.eventbot.listener.EventListener;
-import won.bot.framework.eventbot.listener.impl.ActionOnEventListener;
 import won.bot.framework.eventbot.listener.impl.ActionOnFirstEventListener;
 import won.bot.framework.extensions.serviceatom.ServiceAtomBehaviour;
 import won.bot.framework.extensions.serviceatom.ServiceAtomExtension;
@@ -36,10 +39,6 @@ import won.spoco.raidbot.event.CreateRaidAtomEvent;
 import won.spoco.raidbot.event.DeleteRaidAtomEvent;
 import won.spoco.raidbot.event.ModifyRaidAtomEvent;
 import won.spoco.raidbot.impl.model.ContextRaid;
-
-import java.time.Duration;
-import java.util.Collection;
-import java.util.List;
 
 public class RaidBot extends EventBot implements ServiceAtomExtension {
     private static final Logger logger = LoggerFactory.getLogger(RaidBot.class);
