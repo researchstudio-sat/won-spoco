@@ -35,6 +35,9 @@ thumbs.db
 Thumbs.db
 bin/setenv.*
 
+#certs and keys
+*.jks
+
 #application specific
 
 #local config and data
