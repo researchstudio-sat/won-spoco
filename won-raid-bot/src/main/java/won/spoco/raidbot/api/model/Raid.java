@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public abstract class Raid implements Serializable {
     private final String id;
-    private int level = -1;
-    private int pokedexId = -1;
+    private int level;
+    private int pokedexId;
     private final String pokemonForm;
     private final double gymLat;
     private final double gymLng;
@@ -37,7 +37,7 @@ public abstract class Raid implements Serializable {
         this.id = id;
         this.level = level;
         try {
-            this.pokedexId = Integer.valueOf(pokemonIdString);
+            this.pokedexId = Integer.parseInt(pokemonIdString);
         } catch(NumberFormatException e) {
             this.pokedexId = -1;
         }

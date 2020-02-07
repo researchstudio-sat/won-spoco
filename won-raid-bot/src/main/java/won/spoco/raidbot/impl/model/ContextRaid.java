@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public class ContextRaid implements Serializable {
     private final String id;
-    private int level = -1;
-    private int pokedexId = -1;
+    private int level;
+    private int pokedexId;
     private final String pokemonForm;
     private final double gymLat;
     private final double gymLng;

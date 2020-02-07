@@ -46,21 +46,15 @@ public class DeleteRaidAtomAction extends AbstractDeleteAtomAction {
         logger.debug("deleting atom on won node {} with uri {} ", wonNodeUri, atomURI);
         WonMessage deleteAtomMessage = ctx.getWonMessageSender().prepareMessage(buildWonMessage(atomURI)); //FIXME: MIGHT TAKE THE WRONG NODEURI
 
-        EventListener successCallback = new EventListener() {
-            @Override
-            public void onEvent(Event event) {
-                logger.debug("atom deletion successful, URI was {}", atomURI);
-                botContextWrapper.removeRaid(raidToDelete);
-                EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
-            }
+        EventListener successCallback = event1 -> {
+            logger.debug("atom deletion successful, URI was {}", atomURI);
+            botContextWrapper.removeRaid(raidToDelete);
+            EventBotActionUtils.removeFromList(ctx, atomURI, uriListName);
         };
-        EventListener failureCallback = new EventListener() {
-            @Override
-            public void onEvent(Event event) {
-                String textMessage = WonRdfUtils.MessageUtils
-                        .getTextMessage(((FailureResponseEvent) event).getFailureMessage());
-                logger.error("atom deletion failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
-            }
+        EventListener failureCallback = event12 -> {
+            String textMessage = WonRdfUtils.MessageUtils
+                    .getTextMessage(((FailureResponseEvent) event12).getFailureMessage());
+            logger.error("atom deletion failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event12).getOriginalMessageURI(), textMessage);
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(deleteAtomMessage, successCallback, failureCallback, ctx);
         logger.debug("registered listeners for response to message URI {}", deleteAtomMessage.getMessageURI());

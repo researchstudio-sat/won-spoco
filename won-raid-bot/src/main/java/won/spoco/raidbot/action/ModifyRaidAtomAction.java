@@ -49,20 +49,14 @@ public class ModifyRaidAtomAction extends AbstractModifyAtomAction {
         logger.debug("modify atom {} with content {} ", atomURI, StringUtils.abbreviate(RdfUtils.toString(dataset), 150));
         WonMessage modifyAtomMessage = ctx.getWonMessageSender().prepareMessage(buildWonMessage(atomURI, dataset));
 
-        EventListener successCallback = new EventListener() {
-            @Override
-            public void onEvent(Event event) {
-                logger.debug("atom modification successful, atom URI of modified atom is {}", atomURI);
-                botContextWrapper.addRaid(modifiedRaid, atomURI);
-            }
+        EventListener successCallback = event1 -> {
+            logger.debug("atom modification successful, atom URI of modified atom is {}", atomURI);
+            botContextWrapper.addRaid(modifiedRaid, atomURI);
         };
-        EventListener failureCallback = new EventListener() {
-            @Override
-            public void onEvent(Event event) {
-                String textMessage = WonRdfUtils.MessageUtils
-                        .getTextMessage(((FailureResponseEvent) event).getFailureMessage());
-                logger.error("atom modification failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event).getOriginalMessageURI(), textMessage);
-            }
+        EventListener failureCallback = event12 -> {
+            String textMessage = WonRdfUtils.MessageUtils
+                    .getTextMessage(((FailureResponseEvent) event12).getFailureMessage());
+            logger.error("atom modification failed for atom URI {}, original message URI {}: {}", atomURI, ((FailureResponseEvent) event12).getOriginalMessageURI(), textMessage);
         };
         EventBotActionUtils.makeAndSubscribeResponseListener(modifyAtomMessage, successCallback, failureCallback, ctx);
         logger.debug("registered listeners for response to message URI {}", modifyAtomMessage.getMessageURI());
