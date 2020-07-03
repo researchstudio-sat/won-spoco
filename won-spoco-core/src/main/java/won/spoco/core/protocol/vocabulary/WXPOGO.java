@@ -29,7 +29,7 @@ public class WXPOGO {
     public static final Property pokemonId = m.createProperty(BASE_URI, "pokemonid");
     public static final Property pokemonForm = m.createProperty(BASE_URI, "pokemonform");
 
-    public static final Resource PokemonGo = m.createResource("http://dbpedia.org/resource/Pokemon_Go");
+    public static final Resource PokemonGo = m.createResource("http://www.wikidata.org/entity/Q20966579");
 
     /**
      * Returns the base URI for this schema.
