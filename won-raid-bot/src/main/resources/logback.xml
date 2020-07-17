@@ -24,12 +24,12 @@
         </encoder>
     </appender>
 
-    <logger name="won.spoco" level="DEBUG"/>
+    <logger name="won.spoco.raidbot" level="DEBUG"/>
 
-    <logger name="won.bot" level="DEBUG"/>
-    <logger name="won.bot.framework.bot" level="DEBUG"/>
-    <logger name="won.bot.framework.manager.impl" level="DEBUG"/>
-    <logger name="won.bot.framework.component.atomconsumer" level="DEBUG"/>
+    <logger name="won.bot" level="INFO"/>
+    <logger name="won.bot.framework.bot" level="INFO"/>
+    <logger name="won.bot.framework.manager.impl" level="INFO"/>
+    <logger name="won.bot.framework.component.atomconsumer" level="INFO"/>
     <logger name="org.springframework.aop" level="INFO"/>
     <logger name="won.bot.framework.eventbot.listener" level="INFO"/>
     <logger name="won.bot.framework.eventbot.action.impl.mail" level="INFO"/>
